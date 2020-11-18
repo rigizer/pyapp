@@ -105,6 +105,14 @@ def msg_view():
     msg_id = request.args.get('msg_id')
 
     cursor = conn.cursor()
+
+    # 조회수를 1씩 더한다
+    cursor.execute('update msg set msg_count=msg_count+1 where msg_id=%s', [msg_id])
+
+    # commit을 통해 실제 데이터에 최종적으로 반영한다
+    conn.commit()
+
+    # 메세지 내용 출력
     cursor.execute('select msg_id, msg_count, msg_date, msg_modifydate, msg_writer, msg_title, msg_text from msg where msg_id=%s', [msg_id])
     msg = cursor.fetchone()
 
@@ -143,11 +151,13 @@ def modify_msg():
         return render_template('modify_msg.html', msg = msg)
     elif request.method == 'POST':   # 수정 액션
         msg_id = request.form['msg_id']
+        msg_writer = request.form['msg_writer']
+        msg_title = request.form['msg_title']
         msg_text = request.form['msg_text']
 
         # 데이터베이스 입력
         cursor = conn.cursor()
-        cursor.execute('update msg set msg_text=%s where msg_id=%s', [msg_text, msg_id])
+        cursor.execute('update msg set msg_modifydate=now(), msg_writer=%s, msg_title=%s ,msg_text=%s where msg_id=%s', [msg_writer, msg_title, msg_text, msg_id])
 
         # commit을 통해 실제 데이터에 최종적으로 반영한다
         conn.commit()
