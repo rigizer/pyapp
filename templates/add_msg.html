@@ -33,10 +33,6 @@
 				text-align: center;
 			}
 			
-			.tb-width {
-				width: 80%;
-			}
-			
 			.ul-center {
 				margin-left: auto;
  				margin-right: auto;
@@ -79,22 +75,32 @@
 			<h1>메세지 작성</h1>
 			
 			<br>
-		    
-		    <form method="post" action="/add_msg">
-                <table class="table tb-width center">
+
+			<form method="post" action="/add_msg">
+				<button type="submit" class="btn btn-sm btn-dark" style="float: right;">메세지 입력</button>
+
+				<br><br>
+
+                <table class="table center">
                     <tr>
-                        <th>메세지 내용</th>
+						<th>작성자</th>
+                        <td>
+                            <input type="text" class="form-control" name="msg_writer"></input>
+                        </td>
+					</tr>
+					<tr>
+						<th>제목</th>
+                        <td>
+                            <input type="text" class="form-control" name="msg_title"></input>
+                        </td>
                     </tr>
                     <tr>
+						<th>내용</th>
                         <td>
                             <textarea class="form-control" name="msg_text" rows="20"></textarea>
                         </td>
                     </tr>
                 </table>
-
-                <br>
-
-                <button type="submit" class="btn btn-sm btn-dark">메세지 입력</button>
             </form>
             
 			<br><br>

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>modify_msg</title>
+		<title>msg_view</title>
 		
 		<!-- Bootstrap Framework 사용 -->
 		
@@ -31,7 +31,7 @@
 			.center {
 				margin: auto;
 				text-align: center;
-			}
+            }
 			
 			.ul-center {
 				margin-left: auto;
@@ -53,6 +53,10 @@
 			th {
 				background-color: #F9F9FB;
 			}
+
+            td {
+                text-align: left;
+            }
 		</style>
 	</head>
 	<body>
@@ -72,42 +76,47 @@
 		<div class="container center">
 			<br>
 		
-			<h1>메세지 수정</h1>
+			<h1>메세지 내용</h1>
 			
 			<br>
-		    
-			<form method="post" action="/modify_msg">
-				<button type="submit" class="btn btn-sm btn-dark" style="float: right;">메세지 수정</button>
+            
+            <div class="btn-group" style="float: right;">
+                <button type="button" class="btn btn-sm btn-primary" onclick="location.href='/modify_msg?msg_id={{msg[0]}}'">수정</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="location.href='/del_msg?msg_id={{msg[0]}}'">삭제</button>
+            </div>
 
-				<br><br>
+            <br><br>
 
-                <table class="table center">
-                    <tr>
-                        <th width="15%">번호</th>
-                        <td width="85%">
-                            <input type="text" class="form-control" name="msg_id" value="{{msg[0]}}" readonly="readonly">
-                        </td>
-					</tr>
-					<tr>
-						<th>작성자</th>
-						<td>
-							<input type="text" class="form-control" name="msg_writer" value="{{msg[1]}}">
-						</td>
-					</tr>
-					<tr>
-						<th>제목</th>
-						<td>
-							<input type="text" class="form-control" name="msg_title" value="{{msg[2]}}">
-						</td>
-					</tr>
-                    <tr>
-                        <th>내용</th>
-                        <td>
-                            <textarea class="form-control" name="msg_text" rows="20">{{msg[3]}}</textarea>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+            <table class="table center">
+                <tr>
+                    <th width="15%">번호</th>
+                    <td width="85%">{{msg[0]}}</td>
+                </tr>
+                <tr>
+                    <th>조회수</th>
+                    <td>{{msg[1]}}</td>
+                </tr>
+                <tr>
+                    <th>작성일</th>
+                    <td>{{msg[2]}}</td>
+                </tr>
+                <tr>
+                    <th>최종 수정일</th>
+                    <td>{{msg[3]}}</td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>{{msg[4]}}</td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td>{{msg[5]}}</td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>{{msg[6]}}</td>
+                </tr>
+            </table>
             
 			<br><br>
         </div>

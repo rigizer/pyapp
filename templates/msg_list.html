@@ -33,10 +33,6 @@
 				text-align: center;
 			}
 			
-			.tb-width {
-				width: 80%;
-			}
-			
 			.ul-center {
 				margin-left: auto;
  				margin-right: auto;
@@ -44,6 +40,22 @@
 			
 			.title {
 				font-family: 'Righteous', cursive;
+			}
+
+			.msg-title {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.msg-writer {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.tb-fixed {
+				table-layout: fixed;
 			}
 			
 			body {
@@ -57,6 +69,11 @@
 			th {
 				background-color: #F9F9FB;
 			}
+
+			a:link {color: black;}
+			a:visited {color: black;}
+			a:active {color: black;}
+			a:hover {color: black;}
 		</style>
 	</head>
 	<body>
@@ -79,37 +96,123 @@
 			<h1>메세지 목록</h1>
 			
 			<br>
+
+			<button type="button" class="btn btn-sm btn-dark" style="float: right;" onclick="location.href='/add_msg'">메세지 입력</button>
+
+			<br><br>
 		    
 		    <!-- 데이터 목록 -->
-		    <table class="table table-hover tb-width center">
+		    <table class="table table-hover center tb-fixed">
 	        	<thead>
 		        	<tr>
-		                <th>메세지 번호</th>
-                        <th>메세지 내용</th>
-                        <th>수정</th>
-                        <th>삭제</th>
+		                <th width="10%">번호</th>
+						<th width="50%">제목</th>
+						<th width="10%">작성자</th>
+						<th width="20%">작성일</th>
+						<th width="10%">조회수</th>
 		            </tr>
 	        	</thead>
 	            <tbody>
                     {% for row in msglist %}
                         <tr>
-                            <td>{{row[0]}}</td>
-                            <td>{{row[1]}}</td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-primary" onclick="location.href='/modify_msg?msg_id={{row[0]}}'">수정</button>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-danger" onclick="location.href='/del_msg?msg_id={{row[0]}}'">삭제</button>
-                            </td>
+							<!-- 번호, 제목, 작성자, 작성일, 조회수 -->
+							<td>{{row[0]}}</td>
+							<td class="msg-title"><a href="./msg_view?msg_id={{row[0]}}">{{row[1]}}</a></td>
+							<td class="msg-writer">{{row[2]}}</td>
+							<td>{{row[3]}}</td>
+							<td>{{row[4]}}</td>
                         </tr>
                     {% endfor %}
 	            </tbody>
-            </table>
+			</table>
+			
+			<br>
+			
+			<!-- 페이지 네비게이션 -->
+			<ul class="pagination justify-content-center">
+				<!-- 처음으로 버튼 -->
+				<!-- current_page가 1보다 클 때만 처음으로 갈 수 있음 -->
+				{% if current_page > 1 %}
+					<li class="page-item">
+						<a class="page-link" href="./?current_page=1">
+							<i class='fas fa-angle-double-left'></i>
+						</a>
+					</li>
+				<!-- 첫 페이지 일 때 처음으로 버튼 표시 안 함 -->
+				{% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">
+							<i class='fas fa-angle-double-left'></i>
+						</a>
+					</li>
+				{% endif %}
 
-            <br>
+				<!-- 이전 버튼 -->
+				<!-- current_page가 1보다 클 때만 이전으로 갈 수 있음 -->
+				{% if current_page > 1 %}
+					<li class="page-item">
+						<a class="page-link" href="./?current_page={{pre_page}}">
+							<i class='fas fa-angle-left'></i>
+						</a>
+					</li>
+				<!-- 1이거나 그 이하면 버튼 표시 안 함 -->
+				{% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">
+							<i class='fas fa-angle-left'></i>
+						</a>
+					</li>
+				{% endif %}
 
-            <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/add_msg'">메세지 입력</button>
-            
+				<!-- 현재 페이지 표시 -->
+				{% for i in nav_bar %}
+					{% if i <= last_page %}
+						{% if i == current_page %}
+							<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+						{% else %}
+							<li class="page-item"><a class="page-link" href="./?current_page={{i}}">{{i}}</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+
+				<!-- 다음 버튼 -->
+				<!-- current_page가 last_page보다 작을 때만 다음으로 갈 수 있음 -->
+				{% if current_page < last_page %}
+					<li class="page-item">
+						<a class="page-link" href="./?current_page={{next_page}}">
+							<i class='fas fa-angle-right'></i>
+						</a>
+					</li>
+				<!-- 마지막 페이지 일 때 다음 버튼 표시 안 함 -->
+				{% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">
+							<i class='fas fa-angle-right'></i>
+						</a>
+					</li>
+				{% endif %}
+
+				<!-- 마지막으로 버튼 -->
+				<!-- current_page가 last_page보다 작을 때만 마지막으로 갈 수 있음 -->
+				{% if current_page < last_page %}
+					<li class="page-item">
+						<a class="page-link" href="./?current_page={{last_page}}">
+							<i class='fas fa-angle-double-right'></i>
+						</a>
+					</li>
+				<!-- 마지막 페이지 일 때 마지막으로 버튼 표시 안 함 -->
+				{% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">
+							<i class='fas fa-angle-double-right'></i>
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+			
+			<!-- 총 페이지 수 출력 -->
+			<button type="button" class="btn btn-sm btn-dark">{{current_page}} / {{last_page}} 페이지</button>
+
 			<br><br>
         </div>
 	</body>
