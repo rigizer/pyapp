@@ -5,7 +5,7 @@
 from flask import Flask, render_template, request, redirect
 
 # 데이터베이스를 사용하기 위해 불러온다
-import MySQLdb
+import pymysql
 
 config = {
     "user": "root",
@@ -16,7 +16,7 @@ config = {
     "charset": "utf8"
 }
 
-conn = MySQLdb.connect(**config)
+conn = pymysql.connect(**config)
 
 # flask에서 해당 모듈이 직접 실행될 수 있게 도와주는 장치
 app = Flask(__name__)
@@ -130,7 +130,7 @@ def add_msg():
 
         # 데이터베이스 입력
         cursor = conn.cursor()
-        cursor.execute('insert into msg(msg_writer, msg_title, msg_text, msg_date, msg_modifydate) values(%s, %s, %s, now(), now())', [msg_writer, msg_title, msg_text])
+        cursor.execute('insert into msg(msg_writer, msg_title, msg_text, msg_date, msg_modifydate, msg_count) values(%s, %s, %s, now(), now(), 0)', [msg_writer, msg_title, msg_text])
         
         # commit을 통해 실제 데이터에 최종적으로 반영한다
         conn.commit()
@@ -176,4 +176,4 @@ def del_msg():
 
     return redirect('/')        
 
-app.run(host='0.0.0.0', port=8880)
+app.run(host='0.0.0.0', port=8080)
